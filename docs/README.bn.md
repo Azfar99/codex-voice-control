@@ -1,4 +1,4 @@
-# CODEX Voice Control 0.4.1 — বাংলা নির্দেশনা
+# CODEX Voice Control 0.4.2 — বাংলা নির্দেশনা
 
 Windows-এ কথা বলে Codex-এর নিজস্ব dictation চালানোর ছোট companion। পুরো বাংলা–English লেখা Codex নিজেই transcribe করে; এখানে আলাদা Whisper বা message transcription model নেই।
 
@@ -23,7 +23,9 @@ Windows-এ কথা বলে Codex-এর নিজস্ব dictation চা
 - **Stop completely (until I open it again)** দিলে microphone ও process পুরো বন্ধ এবং login startup বন্ধ হয়। Desktop icon-এ double-click করলে আবার চালু হবে; startup ফের চাইলে menu-তে আলাদা করে on করো।
 - `Ctrl+Alt+D` = manual Record/Stop; `Ctrl+Alt+Escape` = mic pause, pending Send বাতিল এবং নিজের শুরু করা recording cancel করার চেষ্টা।
 
-Codex-এর বড় উইন্ডো আড়াল রেখেই companion তার Record ও Stop বাটন চালায়। Codex ফোকাস নিলে আগের অ্যাপে ফোকাস ফেরানো হয়। পরীক্ষায় minimized ও পেছনে খোলা দুই অবস্থাতেই বড় উইন্ডো দেখা যায়নি। Codex-এ একটি chat খুলে minimized করে রাখো। পুরোপুরি Quit করলে আবার হাতে খুলতে হবে। পাঠানো কাজ শেষের নোটিফিকেশনের জন্য Codex-এর **Settings > Notifications** ব্যবহার করো।
+Codex পুরোপুরি Quit থাকলে **Hello Codex** বলো। ছোট orb-এ **Recording** দেখা গেলে কথা শুরু করো। বড় উইন্ডো তোমার ব্যবহার করা ডেস্কটপে তৈরি হয় না। Codex আলাদা Windows ডেস্কটপে চালু হয়ে নিজের microphone ও dictation ব্যবহার করে। প্রথমবার প্রস্তুত হতে পরীক্ষায় প্রায় ১৩ সেকেন্ড লেগেছে।
+
+বন্ধ অবস্থা থেকে চালু হলে একটি নতুন Codex composer খোলে। পুরোনো নির্দিষ্ট chat-এ বলতে চাইলে সেটি স্বাভাবিকভাবে খুলে রাখো। আগে একবার Codex-এ sign in করে microphone-এর অনুমতি দাও। orb-এর মেনুতে **Open Codex window** দিয়ে স্বাভাবিক উইন্ডো খুলতে পারো। **Close background Codex** দিয়ে পেছনের উইন্ডোটি বন্ধ করা যায়। পাঠানো কাজ শেষের নোটিফিকেশনের জন্য Codex-এর **Settings > Notifications** ব্যবহার করো।
 
 **শেষের Stop/Send শব্দ মুছতে আর Codex editor-এর focus নেওয়া হয় না।** ফলে Codex শব্দটি লিখে ফেললে সেটি draft/message-এর শেষে থাকতে পারে। Preview-তে আসল লেখাটিই দেখা যাবে।
 
@@ -33,6 +35,6 @@ Windows 10 1809+/11 x64, .NET Framework 4.7.2+, compatible Codex app ও নি�
 
 `data/`-তে preferences ও সীমিত আকারের command/error/timing logs থাকে; companion microphone recording বা message transcript disk-এ রাখে না। Codex-এর নিজস্ব data/network ব্যবহার তার settings ও terms অনুযায়ী চলে। RAM কয়েক KB নয়—companion-এর MiB লাগে এবং Codex app-এর RAM আলাদা।
 
-একই PC-র পরীক্ষায় preview read median ৪৮ ms থেকে ২ ms হয়েছে। Preview প্রতি ২৫০ ms-এ আপডেট হয়। Codex-এর transcription-এর সময় নেটওয়ার্ক ও সেবার ওপর নির্ভর করে। ০.৪.১-এ পেছনে থাকা Codex-এর Record/Stop, command audio ও ইনস্টলার পরীক্ষা পাস করেছে। অন্য PC ও ভবিষ্যৎ Codex সংস্করণে আচরণ বদলাতে পারে। Setup unsigned।
+একই PC-র পরীক্ষায় preview read median ৪৮ ms থেকে ২ ms হয়েছে। Preview প্রতি ২৫০ ms-এ আপডেট হয়। Codex-এর transcription-এর সময় নেটওয়ার্ক ও সেবার ওপর নির্ভর করে। ০.৪.২-এ নতুন background instance-এর Record/Stop ও দ্বিতীয়বার ডাক দিয়ে চালানো পরীক্ষা হয়েছে। অন্য PC ও ভবিষ্যৎ Codex সংস্করণে আচরণ বদলাতে পারে। Setup unsigned।
 
 Download/use/নিজের copy বদলানো এবং free share করা ফ্রি, copyright credit রাখতে হবে। Software বা paid software service হিসেবে বিক্রির জন্য আলাদা লিখিত চুক্তি লাগে; স্বয়ংক্রিয় টাকা/royalty কাটা হয় না। [পুরো license](../LICENSE.txt) · [English guide](../README.md)।

@@ -1,5 +1,5 @@
 #define ProductName "CODEX Voice Control"
-#define ProductVersion "0.4.1"
+#define ProductVersion "0.4.2"
 #define ProductExe "CODEX.exe"
 
 [Setup]

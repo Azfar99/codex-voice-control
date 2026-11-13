@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.2 — 2026-11-13
+
+- Start the installed Codex app on a separate Windows desktop when a wake command arrives with no regular Codex window. Native dictation stays outside the user's desktop.
+- Wait for the native Record control to be ready. Support Stop, preview and repeated wake in the new Codex composer.
+- Keep an existing regular Codex chat as the preferred target. Add a menu action to close the separate background window.
+
 ## 0.4.1 — 2026-11-13
 
 - Make the background Codex window transparent before invoking native dictation controls and restore its original opacity after the operation. This addresses the flash reported with the previous window-moving method.

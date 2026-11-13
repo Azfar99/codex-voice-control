@@ -1,4 +1,4 @@
-CODEX Voice Control 0.4.1 — Windows x64
+CODEX Voice Control 0.4.2 — Windows x64
 
 Install and use
 1. Install the OpenAI desktop app and sign in with your own account.
@@ -14,8 +14,10 @@ Desktop and microphone
 - Drag the orb to move it. Right-click for size and microphone controls.
 - Idle stays behind normal windows. An active session appears in front.
 - Quiet is green; speaking is yellow with stronger particle/wave vibration.
-- The large Codex window is transparent during background button operations.
-  Keep a Codex chat open or minimized before using the wake command.
+- When Codex has fully quit, the wake command starts it on a separate Windows
+  desktop. Wait for Recording before speaking. Cold startup can take several seconds.
+- Cold startup uses a fresh Codex composer. To use a specific existing chat,
+  open it normally first. Sign in and allow the microphone before first use.
 - Spoken Stop/Send can remain in the native transcript: automatic keyboard
   cleanup has been removed to keep your current window's focus unchanged.
 - Stop completely closes the microphone and process, and disables startup.
@@ -42,6 +44,6 @@ separate agreement. Read LICENSE.txt. No automatic royalties or fees are taken.
 This independent companion is not an official OpenAI product. Cross-PC and
 app-version compatibility depends on the installed OpenAI app and Windows
 speech components. If controls change, it stops instead of guessing where to type.
-If Codex has fully quit, open it manually once to use its native dictation.
+Use Open Codex window in the orb menu for the regular desktop app.
 Use Codex Settings > Notifications for turn completion alerts.
 See docs/README.bn.md and README.md for more.

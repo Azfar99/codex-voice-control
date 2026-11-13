@@ -2,7 +2,7 @@
 
 **Hands-free Windows voice control for Codex's native dictation.** Say **Hello Codex**, speak in Bengali, English or any language supported by your Codex app, then pause and say **Send**. Your words are transcribed by Codex itself.
 
-Version **0.4.1** · Windows x64 · Free use · Independent community companion
+Version **0.4.2** · Windows x64 · Free use · Independent community companion
 
 ![Green idle, quiet listening and yellow speech-reactive orb](assets/orb-states.png)
 
@@ -40,9 +40,13 @@ Ordinary mentions of “stop”, “send” and “run” inside a sentence are 
 
 The small orb stays behind other windows when idle and appears above them during an active session. Idle/quiet is green; speech makes the frame, waves and particles yellow with stronger outward motion. Size defaults to 76 px, with smaller/larger menu options.
 
-The companion makes the background Codex window transparent before operating its native buttons. A minimized Codex window stays minimized between operations. The companion restores the previous app's focus if Codex takes it while processing a button action. Use **Show Codex** when you want the full window.
+When Codex is already open, the companion makes its background window transparent while using the native buttons. A minimized Codex window stays minimized between operations. Use **Open Codex window** when you want the full window.
 
-Keep a Codex chat open in the background or minimized. If Codex has fully quit, the companion asks you to open it manually before voice dictation can start. This avoids the startup flash from launching the full app on wake. After you send a prompt, use the desktop app's **Settings > Notifications** to choose when Codex shows turn completion alerts. [OpenAI desktop settings](https://learn.chatgpt.com/docs/app/settings#notifications).
+If Codex has fully quit, say **Hello Codex** and wait for the orb to show **Recording** before speaking. The companion starts the installed Codex app on a separate Windows desktop, outside the desktop you are using. It uses Codex's own composer and microphone. The first start took about 13 seconds on the test PC. Later wakes can reuse that process. [Windows desktops](https://learn.microsoft.com/en-us/windows/win32/winstation/about-window-stations-and-desktops).
+
+A cold start opens a fresh Codex composer in a separate renderer profile. To dictate into a specific existing chat, open it normally first. The background profile is stored in `data/background-codex/` and uses the existing Codex sign-in on the tested Windows installation. Sign in and grant microphone access in the normal Codex window before first use. The orb menu can open the normal Codex window or close the background one. Use **Close background Codex** after sending or reviewing your draft.
+
+After you send a prompt, choose when Codex shows turn completion alerts in **Settings > Notifications**. [OpenAI desktop settings](https://learn.chatgpt.com/docs/app/settings#notifications).
 
 **Stop completely** closes the command microphone and companion process, and removes its login startup entry. Double-click the desktop shortcut to restart manually. Startup stays off until you enable it in the menu. Hiding only the orb keeps the tray and microphone running.
 
@@ -54,7 +58,7 @@ The implementation is native **C# / .NET Framework / WinForms / GDI+**, with Win
 
 In the same local read benchmark, cached preview reads improved from **48 ms to 2 ms median**. The preview polling interval changed from 1000 ms to 250 ms and runs only while its panel is open. Short-command endpoint settings, transition polling, renderer allocations and hidden/covered drawing were also reduced. These do not accelerate Codex's own transcription service. Fresh idle memory was about **77 MiB working set / 39 MiB private** on the test PC; this is not a memory ceiling. The full Codex app consumes additional memory.
 
-On the test PC, repeated Record/Stop checks with Codex minimized and behind another app retained the original foreground app and draft. The window monitor observed no visible Codex popup. The command and installer checks also passed. Previous user tests confirmed native dictation and direct Send. Compatibility with other PCs, accents and future Codex versions varies.
+On the test PC, cold Record, Stop and repeated wake passed with a fresh renderer profile. The newly started process had zero windows on the input desktop. The test retains the normal Codex instance running the development session and sends no draft. Minimized Record/Stop, command recognition and installer checks cover the existing workflows. Compatibility with other PCs, accents and future Codex versions varies.
 
 ## Build and publish
 

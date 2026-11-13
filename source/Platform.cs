@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace CodexVoice {
 static class Product {
- public const string Version="0.4.1";
+ public const string Version="0.4.2";
  public const string Name="CODEX Voice Control";
  public const string PackageFamily="OpenAI.Codex_2p2nqsd0c76g0";
  public const string AppId=PackageFamily+"!App";

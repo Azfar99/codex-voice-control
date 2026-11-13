@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Diagnostics;
 
 namespace CodexVoice {
@@ -37,7 +38,7 @@ sealed class Companion:Form {
   animation.Interval=100;animation.Tick+=delegate{int now=Environment.TickCount;double energy=unchecked((uint)(now-lastAudioTick))>300?0:micLevel;visual.Tick(phase,energy,animation.Interval/1000.0);if(Visible&&!Native.IsIconic(Handle)&&Native.WindowFromPoint(PointToScreen(new Point(orbSize/2+10,orbSize/2+10)))==Handle)Invalidate(new Rectangle(0,0,orbSize+20,orbSize+38));if(unchecked((uint)(now-lastStatusTick))>=5000){lastStatusTick=now;WriteRuntimeStatus();}};VisibleChanged+=delegate{animation.Interval=Visible?(phase==SessionState.Recording?33:100):500;};
   previewTimer.Interval=250;previewTimer.Tick+=async delegate{if(busy||reading||!expanded||!bridge.Bound)return;reading=true;try{string text=await Task.Run(()=>bridge.Preview());if(!busy)SetPreview(text);}catch(Exception e){SetState(SessionState.Error,e.Message);}finally{reading=false;}};
   Shown+=async delegate{if(designMode)return;Native.RegisterHotKey(Handle,1,0x0001|0x0002|0x4000,(uint)Keys.Escape);Native.RegisterHotKey(Handle,2,0x0001|0x0002|0x4000,(uint)Keys.D);Startup.Set(Program.Config.AutoStart);animation.Start();previewTimer.Start();if(Program.Config.Hidden)Hide();if(Program.Config.ListenerEnabled)await EnableListener();else SetState(SessionState.Paused,"Command microphone is off · click Record to use Codex");};
-  FormClosing+=async delegate(object sender,FormClosingEventArgs e){if(!closedCleanly){e.Cancel=true;if(closing)return;closing=true;epoch++;listener.Stop();while(busy||reading)await Task.Delay(50);try{await Task.Run(()=>bridge.CancelOwned());}catch(Exception ex){Program.Log(ex);}closedCleanly=true;Close();return;}animation.Stop();previewTimer.Stop();listener.Dispose();Native.UnregisterHotKey(Handle,1);Native.UnregisterHotKey(Handle,2);tray.Visible=false;tray.Dispose();ownedIcon.Dispose();menu.Dispose();tip.Dispose();Program.Config.X=Left;Program.Config.Y=Top;Program.Config.Save();};
+  FormClosing+=async delegate(object sender,FormClosingEventArgs e){if(!closedCleanly){e.Cancel=true;if(closing)return;closing=true;epoch++;listener.Stop();while(busy||reading)await Task.Delay(50);try{await Task.Run(()=>{bridge.CancelOwned();if(Program.Config.StoppedByUser)bridge.CloseBackground();});}catch(Exception ex){Program.Log(ex);}finally{bridge.ReleaseBackground();}closedCleanly=true;Close();return;}animation.Stop();previewTimer.Stop();listener.Dispose();Native.UnregisterHotKey(Handle,1);Native.UnregisterHotKey(Handle,2);tray.Visible=false;tray.Dispose();ownedIcon.Dispose();menu.Dispose();tip.Dispose();Program.Config.X=Left;Program.Config.Y=Top;Program.Config.Save();};
   SetState(SessionState.Idle,message);
  }
  protected override bool ShowWithoutActivation{get{return true;}}
@@ -52,7 +53,8 @@ sealed class Companion:Form {
   var sizes=new ToolStripMenuItem("Orb size");foreach(int n in new[]{56,68,76,92}){int value=n;sizes.DropDownItems.Add(value+" px",null,delegate{orbSize=value;Program.Config.Size=value;Program.Config.Save();LayoutUi();});}menu.Items.Add(sizes);
   var startup=new ToolStripMenuItem("Start when I sign in"){Checked=Program.Config.AutoStart,CheckOnClick=true};startup.Click+=delegate{try{Startup.Set(startup.Checked);}catch(Exception e){SetState(SessionState.Error,e.Message);}};menu.Items.Add(startup);
   menu.Items.Add("Hide orb (keep tray)",null,delegate{Program.Config.Hidden=true;Program.Config.Save();Hide();});
-  menu.Items.Add("Show Codex",null,delegate{ShowCodex();});
+  menu.Items.Add("Open Codex window",null,delegate{ShowCodex();});
+  menu.Items.Add("Close background Codex",null,delegate{CloseBackgroundCodex();});
   menu.Items.Add(new ToolStripSeparator());menu.Items.Add("Stop completely (until I open it again)",null,delegate{StopCompletely();});
  }
  void RestoreOrb(){Program.Config.Hidden=false;Program.Config.Save();Show();Clamp();}
@@ -66,8 +68,9 @@ sealed class Companion:Form {
   busy=true;int actionEpoch=epoch;lastAction=DateTime.UtcNow;while(reading)await Task.Delay(25);
   try {
    if(action==VoiceAction.Wake||action==VoiceAction.Start){
-    if(phase==SessionState.Error)bridge.RebindIfSafe();RestoreOrb();SetState(SessionState.Starting,"Opening Codex's own dictation…");
-    string msg=await Task.Run(()=>bridge.Start());if(actionEpoch!=epoch){await Task.Run(()=>bridge.CancelOwned());return;}listener.SetActive(true);SetState(SessionState.Recording,msg);
+    if(action==VoiceAction.Wake||phase==SessionState.Error)bridge.RebindIfSafe();
+    RestoreOrb();SetState(SessionState.Starting,"Opening Codex's own dictation…");
+    string msg=await Task.Run(()=>bridge.Start(()=>actionEpoch!=Volatile.Read(ref epoch)));if(actionEpoch!=epoch){await Task.Run(()=>bridge.CancelOwned());return;}listener.SetActive(true);SetState(SessionState.Recording,msg);
    }else if(action==VoiceAction.Stop){
     SetState(SessionState.Transcribing,"Codex is finishing your transcript…");string text=await Task.Run(()=>bridge.Stop());
     SetPreview(text);listener.SetActive(true);SetState(SessionState.Ready,"Draft stays in Codex · Start to add more · Send or Run to submit");
@@ -79,7 +82,7 @@ sealed class Companion:Form {
     if(actionEpoch!=epoch)return;
     SetState(SessionState.Sending,"Sending the prepared Codex draft once…");string result=await Task.Run(()=>bridge.Send(()=>actionEpoch!=epoch));SetPreview("");listener.SetActive(false);SetState(SessionState.Idle,result);
    }
-  }catch(OperationCanceledException){SetState(SessionState.Paused,"Pending send cancelled · draft stays in Codex");}catch(Exception e){
+  }catch(OperationCanceledException){SetState(SessionState.Paused,"Pending operation cancelled · draft stays in Codex");}catch(Exception e){
    Program.Log(e);
    SetState(SessionState.Error,e.Message);
    if(bridge.Bound)listener.SetActive(true);
@@ -96,7 +99,29 @@ sealed class Companion:Form {
  void Down(object sender,MouseEventArgs e){if(e.Button!=MouseButtons.Left)return;Capture=true;dragAt=e.Location;dragged=false;}
  void MoveOrb(object sender,MouseEventArgs e){if(e.Button!=MouseButtons.Left)return;if(Math.Abs(e.X-dragAt.X)+Math.Abs(e.Y-dragAt.Y)>4)dragged=true;if(dragged)Location=new Point(Left+e.X-dragAt.X,Top+e.Y-dragAt.Y);}
  void Up(object sender,MouseEventArgs e){if(e.Button!=MouseButtons.Left)return;Capture=false;if(dragged){Clamp();Program.Config.X=Left;Program.Config.Y=Top;Program.Config.Save();return;}if(e.Y>orbSize+7){Expand(!expanded);return;}Dispatch(phase==SessionState.Recording?VoiceAction.Stop:VoiceAction.Start,false);}
- void ShowCodex(){foreach(var p in Process.GetProcessesByName("ChatGPT")){try{if(p.MainWindowHandle!=IntPtr.Zero&&CodexBridge.AllowedPath(p.MainModule.FileName)){Native.ShowWindow(p.MainWindowHandle,9);Native.SetForegroundWindow(p.MainWindowHandle);return;}}catch{}finally{p.Dispose();}}Expand(true);SetState(SessionState.Error,"Open Codex from the Windows Start menu, choose a chat, then leave it minimized.");}
+ void ShowCodex(){
+  if(busy||closing)return;
+  try{
+   if(!CodexBridge.ShowExistingCodex()){
+    if(String.IsNullOrEmpty(AppDiscovery.FindExecutable()))throw new InvalidOperationException("Install the OpenAI desktop app first.");
+    using(Process.Start(new ProcessStartInfo(BackgroundCodex.NewChatLink){UseShellExecute=true})){}
+   }
+  }
+  catch(Exception error){Expand(true);SetState(SessionState.Error,error.Message);}
+ }
+ async void CloseBackgroundCodex(){
+  if(busy||closing||phase==SessionState.Recording||phase==SessionState.Transcribing||phase==SessionState.Sending)return;
+  busy=true;
+  UpdateButtons();
+  while(reading)await Task.Delay(25);
+  try{
+   if(await Task.Run(()=>bridge.CloseBackground())){
+    if(!bridge.Bound){SetPreview("");listener.SetActive(false);SetState(SessionState.Idle,"Ready · Hello / Okay / Hey Codex");}
+    tray.ShowBalloonTip(3000,Product.Name,"Background Codex close requested.",ToolTipIcon.Info);
+   }
+  }catch(Exception error){Program.Log(error);SetState(SessionState.Error,error.Message);}
+  finally{busy=false;UpdateButtons();}
+ }
  protected override void OnPaint(PaintEventArgs e){base.OnPaint(e);float cx=(orbSize+20)/2f,cy=orbSize/2f+10;visual.Draw(e.Graphics,cx,cy,orbSize);using(var p=new Pen(Color.FromArgb(150,visual.Accent),1.2f)){float yy=orbSize+20;e.Graphics.DrawLines(p,expanded?new[]{new PointF(cx-4,yy+3),new PointF(cx,yy),new PointF(cx+4,yy+3)}:new[]{new PointF(cx-4,yy),new PointF(cx,yy+3),new PointF(cx+4,yy)});}}
  static Icon CreateIcon(){using(var bmp=new Bitmap(32,32)){using(var g=Graphics.FromImage(bmp)){g.SmoothingMode=SmoothingMode.AntiAlias;using(var p=new Pen(Color.FromArgb(51,226,139),2.5f)){g.DrawEllipse(p,4,4,24,24);g.DrawArc(p,8,6,16,20,20,270);}using(var b=new SolidBrush(Color.FromArgb(170,255,201)))g.FillEllipse(b,13,13,6,6);}IntPtr h=bmp.GetHicon();try{return (Icon)Icon.FromHandle(h).Clone();}finally{DestroyIcon(h);}}}
  protected override void OnLoad(EventArgs e){base.OnLoad(e);LayoutUi();}

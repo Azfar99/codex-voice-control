@@ -41,7 +41,8 @@ $metadata=Get-Content -LiteralPath (Join-Path $projectRoot 'repo-metadata.json')
 Assert-Release ($metadata.topics.Count -le 20 -and @($metadata.topics|Where-Object{$_ -notmatch '^[a-z0-9][a-z0-9-]{0,49}$'}).Count -eq 0) 'proposed GitHub topics use valid names'
 $bridge=Get-Content -LiteralPath (Join-Path $projectRoot 'source\CodexBridge.cs') -Raw
 Assert-Release ($bridge -notmatch 'SetFocus\(|SendInput\(|TypeUnicode\(|CleanControl\(') 'native bridge contains no editor-focus or keyboard-retyping path'
-Assert-Release ($bridge -notmatch 'LaunchInstalled\(|Process\.Start\(|ShowWindow\([^,]+,\s*9\)') 'voice control cannot cold-launch or explicitly foreground the Codex host'
+$backgroundHost=Get-Content -LiteralPath (Join-Path $projectRoot 'source\BackgroundCodex.cs') -Raw
+Assert-Release ($backgroundHost -match 'Desktop = name' -and $backgroundHost -notmatch 'SwitchDesktop\(|ShellExecute\(' -and $bridge -notmatch 'Process\.Start\(') 'the cold launch targets the separate desktop and has no interactive launch fallback'
 if(!$SkipInstallTest){
   $testFolder=Join-Path $projectRoot "build\setup-smoke-$version-$PID"
   $resolved=[IO.Path]::GetFullPath($testFolder);$buildRoot=[IO.Path]::GetFullPath((Join-Path $projectRoot 'build'))+[IO.Path]::DirectorySeparatorChar

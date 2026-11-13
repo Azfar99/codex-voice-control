@@ -1,6 +1,6 @@
 # Windows packaging
 
-End users run `CODEX-Voice-Control-0.4.1-Windows-x64-Setup.exe`; no build tool,
+End users run `CODEX-Voice-Control-0.4.2-Windows-x64-Setup.exe`; no build tool,
 license key or Python is needed. They need their own compatible OpenAI Codex
 desktop app, account and Windows English speech recognizer. Setup does not
 install/sign in to OpenAI or copy the author's account.
@@ -35,7 +35,7 @@ startup registration; it does not delete Codex or its data.
 Isolated packaging test (never use TESTMODE for ordinary installs):
 
 ```powershell
-.\releases\CODEX-Voice-Control-0.4.1-Windows-x64-Setup.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /TESTMODE=1 /TASKS="" /DIR=F:\CodexVoiceAssistant\build\setup-smoke-0.4.1
+.\releases\CODEX-Voice-Control-0.4.2-Windows-x64-Setup.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /TESTMODE=1 /TASKS="" /DIR=F:\CodexVoiceAssistant\build\setup-smoke-0.4.2
 ```
 
 TESTMODE suppresses desktop/startup/account discovery integration and app

@@ -24,6 +24,10 @@ static class Program {
     if(args[0]=="--inspect") {File.WriteAllText(Path.Combine(Root,"build","native-inspection.txt"),NativeProbe.Inspect());return 0;}
     if(args[0]=="--self-test") {SelfTests.Run(false);return 0;}
     if(args[0]=="--voice-self-test") {SelfTests.Run(true);return 0;}
+    if(args[0]=="--cold-start-self-test"){
+     File.WriteAllText(Path.Combine(Root,"build","cold-start-self-test.txt"),System.Threading.Tasks.Task.Run(()=>CodexBridge.CheckColdStart()).GetAwaiter().GetResult());
+     return 0;
+    }
     if(args[0]=="--bridge-check") {File.WriteAllText(Path.Combine(Root,"build","bridge-check.txt"),new CodexBridge().Check());return 0;}
     if(args[0]=="--bridge-benchmark"){File.WriteAllText(Path.Combine(Root,"build","bridge-benchmark.txt"),System.Threading.Tasks.Task.Run(()=>new CodexBridge().Benchmark()).GetAwaiter().GetResult());return 0;}
     if(args[0]=="--background-record-test"){File.WriteAllText(Path.Combine(Root,"build","background-record-test.txt"),System.Threading.Tasks.Task.Run(()=>new CodexBridge().CheckBackgroundRecording()).GetAwaiter().GetResult());return 0;}

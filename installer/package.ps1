@@ -56,8 +56,9 @@ Right-click > Stop completely closes the mic/process and disables startup.
 Double-click the Desktop icon to restart. Download/use is free with the custom
 copyright-credit license; no license key, password or automatic fee is needed.
 
-Keep a Codex chat open in the background or minimized. If Codex has fully quit,
-open it manually to enable native dictation. Setup is unsigned.
+If Codex has fully quit, the wake command starts it on a separate Windows desktop.
+Wait for Recording before speaking. Open a specific chat normally to dictate
+into that chat. Sign in and allow the microphone before first use. Setup is unsigned.
 See README.md, docs/README.bn.md and docs/GITHUB-PUBLISH.md in the Source ZIP.
 "@|Set-Content -LiteralPath (Join-Path $releaseRoot 'START-HERE.txt') -Encoding utf8
 $approved|Select-Object Name,Length
