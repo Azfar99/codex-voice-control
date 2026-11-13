@@ -1,0 +1,47 @@
+CODEX Voice Control 0.4.1 — Windows x64
+
+Install and use
+1. Install the OpenAI desktop app and sign in with your own account.
+2. Run the CODEX Voice Control Setup EXE. It needs no license key or payment.
+3. Double-click the CODEX Voice Control desktop icon.
+4. Say "Hello Codex", wait for recording, then speak in Codex's own dictation.
+5. Pause at least TWO seconds before saying "Stop", "Send" or "Run" alone.
+   Ordinary mentions of these words inside speech are ignored.
+6. Send/Run can finish recording and submit directly. The arrow shows the actual
+   Codex draft. Start/Okay start adds more dictation after a Stop.
+
+Desktop and microphone
+- Drag the orb to move it. Right-click for size and microphone controls.
+- Idle stays behind normal windows. An active session appears in front.
+- Quiet is green; speaking is yellow with stronger particle/wave vibration.
+- The large Codex window is transparent during background button operations.
+  Keep a Codex chat open or minimized before using the wake command.
+- Spoken Stop/Send can remain in the native transcript: automatic keyboard
+  cleanup has been removed to keep your current window's focus unchanged.
+- Stop completely closes the microphone and process, and disables startup.
+  Double-click the desktop icon to start again. This does not re-enable startup;
+  use "Start when I sign in" in the menu if you want it back.
+- Ctrl+Alt+Escape pauses the microphone and cancels a pending send.
+
+Requirements
+- Windows 10 1809+/11 x64; .NET Framework 4.7.2+.
+- Installed OpenAI Codex desktop package with Codex mode and dictation available.
+- Windows English (United States) speech recognizer for small voice commands.
+  The companion does not transcribe your message; Codex does that itself.
+- Codex account/network requirements still apply. This does not share the
+  author's login, API key or account. No Whisper model or Python is required.
+
+বাংলা: Hello Codex বলে ডাকো, কথা বলো, তারপর অন্তত ২ সেকেন্ড চুপ থেকে
+Stop / Send / Run বলো। তীরচিহ্নে Codex-এর লেখা দেখা যায়। ডান-ক্লিকে
+Stop completely দিলে পুরো বন্ধ হবে; desktop icon-এ double-click করলে ফের চলবে।
+
+Free use, copying and modification are allowed with copyright credit.
+Selling the software or offering a modified paid version/service needs a
+separate agreement. Read LICENSE.txt. No automatic royalties or fees are taken.
+
+This independent companion is not an official OpenAI product. Cross-PC and
+app-version compatibility depends on the installed OpenAI app and Windows
+speech components. If controls change, it stops instead of guessing where to type.
+If Codex has fully quit, open it manually once to use its native dictation.
+Use Codex Settings > Notifications for turn completion alerts.
+See docs/README.bn.md and README.md for more.

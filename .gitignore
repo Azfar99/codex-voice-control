@@ -1,0 +1,9 @@
+/data/
+/build/
+/tools/
+/CODEX-next.exe
+/CODEX-validation.exe
+/CODEX-profile.exe
+/releases/
+*.user
+*.pdb

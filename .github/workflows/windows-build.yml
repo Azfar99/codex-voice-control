@@ -1,0 +1,19 @@
+name: Build Windows packages
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  package:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Fetch verified installer compiler
+        shell: pwsh
+        run: ./installer/get-build-tool.ps1
+      - name: Build source and setup packages
+        shell: pwsh
+        run: ./installer/package.ps1 -SkipChecks
+      - uses: actions/upload-artifact@v7
+        with:
+          name: CODEX-Voice-Control-Windows
+          path: releases/*

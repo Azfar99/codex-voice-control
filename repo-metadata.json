@@ -1,0 +1,8 @@
+{
+  "name": "codex-voice-control",
+  "description": "Windows voice control for Codex native dictation: Bengali and English speech, wake commands, draft preview and hands-free Send.",
+  "topics": ["codex", "voice-control", "voice-commands", "dictation", "windows", "windows-desktop", "bengali", "bangla", "accessibility", "hands-free", "csharp", "winforms", "ui-automation", "native-dictation"],
+  "visibility": "public",
+  "license": "Custom free-use/source-available; commercial redistribution requires a separate agreement",
+  "note": "Proposed metadata for publishing. This file does not change GitHub repository settings or publish anything."
+}

@@ -1,0 +1,18 @@
+CODEX Voice Control is an independent companion; it is not an OpenAI product.
+Its own source and assets use LICENSE.txt.
+
+Microsoft Windows, .NET Framework, System.Speech and UI Automation are existing
+Windows components. They are not bundled or relicensed by this project.
+
+OpenAI Codex / ChatGPT desktop app, its account and dictation service are not
+bundled. Users install and sign in to their own compatible app. OpenAI names and
+trademarks remain with their owners.
+
+The Setup EXE is generated using Inno Setup 7.1.1, copyright Jordan Russell and
+Martijn Laan / Pyrsys B.V. Compiler/tool terms remain separate from the product.
+Official tool source: https://github.com/jrsoftware/issrc
+Tool license: https://github.com/jrsoftware/issrc/blob/main/LICENSE.TXT
+No Inno compiler, IDE or build-tool installation is needed by end users.
+
+No Whisper model, Python runtime, downloaded neural model, account credential,
+API token or microphone recording is distributed in the installer or ZIPs.

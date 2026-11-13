@@ -1,0 +1,44 @@
+CODEX Voice Control — Free Use and Noncommercial Distribution License 1.0
+
+Copyright (c) 2026 Azfar99. All rights reserved except those granted below.
+
+1. Free use and modification
+You may download, install, run, copy, study and modify this software without
+paying a fee. This includes personal use and use for your own internal work or
+business. No license key, password, activation fee or permission request is
+required for these uses.
+
+2. Free redistribution
+You may share original or modified copies without charging for the software.
+Keep this license and the copyright notice with substantial copies, retain
+credit to the original project, and identify your modifications. Do not imply
+that a modified copy is the original author's release or is endorsed by them.
+
+3. Paid redistribution and services
+Selling, charging a license/subscription fee for, sublicensing for payment, or
+offering this software or a modified version as a paid software service requires
+a separate written commercial agreement with the copyright holder. Any royalty
+or revenue share must be agreed in that agreement. This license does not set a
+percentage, create an automatic payment, or collect money from ordinary users.
+Charging for your own work produced with the software is not a software sale
+and is permitted under section 1.
+
+4. Ownership and contributions
+Copyright in the original software remains with its copyright holder. Changing
+your copy does not grant write access to the original repository. Contributions
+do not change the original project's terms unless its owner separately agrees.
+
+5. Third-party software and names
+This license covers the companion's own source and assets only. Microsoft
+Windows/.NET and the installed OpenAI application have their own terms. This
+independent companion does not include the OpenAI application, its models, an
+OpenAI account, API credentials or a license to OpenAI trademarks.
+
+6. No warranty
+The software is provided as-is, without warranties of performance, accuracy,
+fitness for a particular purpose or uninterrupted availability. To the extent
+permitted by applicable law, its authors are not liable for loss or damage from
+its use. Mandatory rights under applicable law are not excluded.
+
+For commercial redistribution permission, contact the owner of the original
+CODEX Voice Control repository (Azfar99).
